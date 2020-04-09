@@ -1,7 +1,6 @@
 from room import Room
 from player import Player
 from item import Item, Food
-# import os
 
 # Declare all the rooms -> old example
 # room = {
@@ -61,16 +60,15 @@ treasure_east.items = [sandwich, coin]
 player = Player(input("Enter your name: "), outside)
 print(f"{player.current_room}")
 
-# player.inventory.append(sandwich)
-
 # Start Loop
 directions = ("n", "s", "e", "w")
-tools = ("i", "c", "t", "d")
+tools = ("i", "c", "t", "d", "eat", "q")
 
 while True:
     print(
-        f"Available Tools: \n Show Inventory: '{tools[0]}' \n Take Items: '{tools[1]}' \n Drop Item: '{tools[2]}'")
+        f"Available Tools: \n Show Inventory: '{tools[0]}' \n Check for items: '{tools[1]}' \n Take Items: '{tools[2]}' \n Drop Item: '{tools[3]}' \n Eat: '{tools[4]}' \n Quit: '{tools[5]}' \n")
     cmd = input("~~> ")
+    multi_cmd = cmd.split(" ")
     if cmd == "q":
         print("Goodbye")
         exit(0)
@@ -80,17 +78,38 @@ while True:
         player.show_inventory()
     elif cmd == tools[1]:
         player.current_room.show_items()
-    elif cmd == tools[2]:
+    elif multi_cmd[0] == tools[2]:
         if len(player.current_room.items) == 0:
             print(f"THere are no items here")
-        elif len(cmd) == 2:
+        elif len(multi_cmd) == 2:
             for item in player.current_room.items:
-                if item.name == cmd[1]:
+                if item.name == multi_cmd[1]:
                     player.pick_up_item(item)
-                elif item.name != cmd[1]:
-                    print(f"ther is no {cmd[1]} in this room")
-    elif cmd == tools[3]:
-        pass
+                elif item.name != multi_cmd[1]:
+                    print(f"ther is no {multi_cmd[1]} in this room")
+    elif multi_cmd[0] == tools[3]:
+        if len(player.inventory) == 0:
+            print("Inventory is empty")
+        elif len(multi_cmd) == 1 and multi_cmd[0] == tools[3]:
+            print("Choose an item to drop")
+        elif len(multi_cmd) == 2:
+            for item in player.inventory:
+                if item.name == multi_cmd[1]:
+                    player.drop_item(item)
+                elif item.name != multi_cmd[1]:
+                    print(f"There is no {multi_cmd[1]} in your inventory")
+    elif multi_cmd[0] == tools[4]:
+        if len(player.inventory) == 0:
+            print("Inventory is empty")
+        elif len(multi_cmd) == 1 and multi_cmd[0] == tools[4]:
+            print("Choose a food item to eat")
+        elif len(multi_cmd) == 2:
+            for item in player.inventory:
+                if item.name == multi_cmd[1]:
+                    player.eat(item)
+                elif item.name != multi_cmd[1]:
+                    print(f"There is no {multi_cmd[1]} in your inventory")
+
     else:
         print("That command does not work")
 # End Loop
