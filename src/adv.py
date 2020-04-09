@@ -1,6 +1,14 @@
 from room import Room
 from player import Player
 from item import Item, Food
+# import can also be done as follows:
+#
+# import room
+# import player
+# import item
+#
+# But if you use things from those file imports you would have to access it like and object. Ex: -> room_name = room.Room("name of room", "description")
+
 
 # Declare all the rooms -> old example
 # room = {
@@ -21,6 +29,10 @@ from item import Item, Food
 # chamber! Sadly, it has already been completely emptied by
 # earlier adventurers. The only exit is to the south."""),
 # }
+#
+# Could have also renamed the rooms as follows:
+# outside = room['outside']
+
 
 # Make Rooms
 outside = Room("Outside Cave Entrance", "North of you, the cave mount beckons")
@@ -60,13 +72,14 @@ treasure_east.items = [sandwich, coin]
 player = Player(input("Enter your name: "), outside)
 print(f"{player.current_room}")
 
+
 # Start Loop
 directions = ("n", "s", "e", "w")
 tools = ("i", "c", "t", "d", "eat", "q")
 
 while True:
     print(
-        f"Available Tools: \n Show Inventory: '{tools[0]}' \n Check for items: '{tools[1]}' \n Take Items: '{tools[2]}' \n Drop Item: '{tools[3]}' \n Eat: '{tools[4]}' \n Quit: '{tools[5]}' \n")
+        f"Available Tools: \n Show Inventory: '{tools[0]}' \n Check for items: '{tools[1]}' \n Take Items: '{tools[2]} + item name' \n Drop Item: '{tools[3]} + item name' \n Eat: '{tools[4]} + item name' \n Quit: '{tools[5]}' \n")
     cmd = input("~~> ")
     multi_cmd = cmd.split(" ")
     if cmd == "q":
@@ -80,7 +93,7 @@ while True:
         player.current_room.show_items()
     elif multi_cmd[0] == tools[2]:
         if len(player.current_room.items) == 0:
-            print(f"THere are no items here")
+            print(f"There are no items here")
         elif len(multi_cmd) == 2:
             for item in player.current_room.items:
                 if item.name == multi_cmd[1]:
@@ -113,39 +126,3 @@ while True:
     else:
         print("That command does not work")
 # End Loop
-
-
-# longer/less DRY version
-# LOOP
-# while True:
-#     # PRINT
-#     print(f"Location: {player.current_room.name}")
-#     print(player.current_room.description)
-#     # READ
-#     cmd = input("~~> ")
-#     # EVALUATE
-#     if cmd == "q":
-#         print("Goodbye")
-#         exit(0)
-#     elif cmd == "n":
-#         if player.current_room.n_to is not None:
-#             player.current_room = player.current_room.n_to
-#         else:
-#             print("You cannot move in that direction")
-#     elif cmd == "s":
-#         if player.current_room.s_to is not None:
-#             player.current_room = player.current_room.s_to
-#         else:
-#             print("You cannot move in that direction")
-#     elif cmd == "e":
-#         if player.current_room.e_to is not None:
-#             player.current_room = player.current_room.e_to
-#         else:
-#             print("You cannot move in that direction")
-#     elif cmd == "w":
-#         if player.current_room.w_to is not None:
-#             player.current_room = player.current_room.w_to
-#         else:
-#             print("You cannot move in that direction")
-#     else:
-#         print("That command does not work")
